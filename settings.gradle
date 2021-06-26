@@ -1,0 +1,5 @@
+rootProject.name = 'scrapeit'
+
+include 'common'
+include 'api'
+include 'async'
