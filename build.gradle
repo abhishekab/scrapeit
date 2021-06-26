@@ -1,0 +1,25 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+    dependencies {
+        classpath("io.spring.javaformat:spring-javaformat-gradle-plugin:0.0.28")
+    }
+}
+
+allprojects {
+
+    apply plugin: 'io.spring.javaformat'
+
+    apply plugin: 'checkstyle'
+
+    checkstyle {
+        toolVersion = "8.32"
+    }
+
+    dependencies {
+        checkstyle("io.spring.javaformat:spring-javaformat-checkstyle:0.0.28")
+    }
+
+}
