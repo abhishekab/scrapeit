@@ -8,4 +8,6 @@ public interface CoursePersistence {
 
 	void saveAll(List<Course> courseList);
 
+	List<Course> getPaginatedCourses(int page, int size);
+
 }
