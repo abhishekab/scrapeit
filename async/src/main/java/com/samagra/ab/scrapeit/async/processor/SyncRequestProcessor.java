@@ -1,21 +1,32 @@
 package com.samagra.ab.scrapeit.async.processor;
 
-import com.samagra.ab.scrapeit.common.config.RabbitMqConfiguration;
+import java.io.IOException;
 
+import com.samagra.ab.scrapeit.async.service.SyncCoursesService;
+import com.samagra.ab.scrapeit.common.config.RabbitMqConfiguration;
 import com.samagra.ab.scrapeit.common.enums.SyncMessage;
+
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
 @Component
-@RabbitListener(queues = RabbitMqConfiguration.SCRAPER_QUEUE_NAME)
+@RabbitListener(queues = RabbitMqConfiguration.SYNC_QUEUE_NAME)
 public class SyncRequestProcessor {
 
+	private final SyncCoursesService syncCoursesService;
+
+	public SyncRequestProcessor(SyncCoursesService syncCoursesService) {
+		this.syncCoursesService = syncCoursesService;
+	}
+
 	@RabbitHandler
-	public void process(SyncMessage syncMessage) throws InterruptedException {
+	public void process(SyncMessage syncMessage) throws IOException {
 		System.out.println("Message received:" + syncMessage.name());
-		Thread.sleep(10000);
-		System.out.println("Synced");
+		if (syncMessage == SyncMessage.SYNC) {
+			this.syncCoursesService.syncCourses();
+		}
+
 	}
 
 }

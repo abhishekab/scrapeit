@@ -11,15 +11,18 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMqConfiguration {
 
-	public static final String SCRAPER_QUEUE_NAME = "com.samagra.ab.scraper.queue";
+	/**
+	 * Name of the single Queue which takes Syn Requests.
+	 */
+	public static final String SYNC_QUEUE_NAME = "com.samagra.ab.scraper.queue";
 
 	@Bean
 	public Queue queue() {
-		return new Queue(SCRAPER_QUEUE_NAME);
+		return new Queue(SYNC_QUEUE_NAME);
 	}
 
 	@Bean
-	public MessageConverter jsonMessageConverter() {
+	public MessageConverter simpleMessageConverter() {
 		return new SimpleMessageConverter();
 	}
 
@@ -27,7 +30,7 @@ public class RabbitMqConfiguration {
 	public RabbitTemplate rabbitTemplate(final ConnectionFactory connectionFactory) {
 
 		final RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-		rabbitTemplate.setMessageConverter(jsonMessageConverter());
+		rabbitTemplate.setMessageConverter(simpleMessageConverter());
 		return rabbitTemplate;
 	}
 
