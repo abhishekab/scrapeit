@@ -18,7 +18,19 @@ public class DefaultExceptionHandler extends ResponseEntityExceptionHandler {
 	 */
 	public static final String DEFAULT_ERROR_MESSAGE = "Something went wrong unexpectedly";
 
+	/**
+	 * Error message in case of IllegalArgumentException exception.
+	 */
+	public static final String ILLEGAL_ARGUMENTS_ERROR_MESSAGE = "Invalid Arguments Passed";
+
 	private static final Logger logger = LoggerFactory.getLogger(DefaultExceptionHandler.class);
+
+	@ExceptionHandler(IllegalArgumentException.class)
+	public ResponseEntity<ResponseData<String>> illegalArgumentExceptionHandler(IllegalArgumentException ex) {
+		logger.error("RuntimeException", ex);
+		ResponseData<String> responseData = new ResponseData<>(false, null, ILLEGAL_ARGUMENTS_ERROR_MESSAGE);
+		return new ResponseEntity<>(responseData, HttpStatus.UNPROCESSABLE_ENTITY);
+	}
 
 	@ExceptionHandler(RuntimeException.class)
 	public ResponseEntity<ResponseData<String>> genericExceptionHandler(RuntimeException ex) {
